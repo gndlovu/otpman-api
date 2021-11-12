@@ -1,0 +1,2 @@
+### Test API endpoint
+GET http://localhost:2000/api/v1/hello
