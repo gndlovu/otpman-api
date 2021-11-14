@@ -14,7 +14,7 @@
     },
     "servers": [
         {
-            "url": "http://localhost/api/v1",
+            "url": "http://localhost:2000/api/v1",
             "description": "Swagger OpenApi server"
         }
     ],
@@ -83,7 +83,6 @@
                                 "type": "object",
                                 "example": {
                                     "email": "gladwell_n@live.com",
-                                    "identifier": 1,
                                     "pin": 123456
                                 }
                             }

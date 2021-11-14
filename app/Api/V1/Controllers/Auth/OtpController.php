@@ -83,7 +83,7 @@ class OtpController extends Controller
      *                      property="pin",
      *                      type="integer"
      *                  ),
-     *                  example={"email": "gladwell_n@live.com", "identifier": 1, "pin": 123456 }
+     *                  example={"email": "gladwell_n@live.com", "pin": 123456 }
      *              )
      *          )
      *      ),
