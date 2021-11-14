@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Api\V1\Services\Auth\OtpService\IOtpService;
 use App\Api\V1\Repositories\Auth\OtpRepository\IOtpRepository;
 use App\Api\V1\Repositories\Auth\OtpRepository\OtpRepository;
+use App\Notifications\OtpNotification;
 use Log;
 
 class OtpService implements IOtpService
@@ -70,21 +71,22 @@ class OtpService implements IOtpService
                 $otp->save();
                 Log::info('Update resend count');
             }
-
-            // A user cannot receive the same OTP number if it's within a 24 hour period. If that happens, a
-            // new one should be generated and the user should not be made aware that the same one was
-            // randomly generated.
-            do {
-                $isGenerated = $this->otpRepo->isGeneratedTwentyFourHourAgo($otp);
-                if ($isGenerated) {
-                    Log::info('PIN (' . $otp->pin . ') was generated 24 hours ago, generate a new one.');
-                    $otp = $this->createOtpRecord($email);
-                }
-            } while ($isGenerated);
-
-            Log::info('sending PIN ' . $otp->pin);
-            // TODO - Send email notification
         }
+
+        // A user cannot receive the same OTP number if it's within a 24 hour period. If that happens, a
+        // new one should be generated and the user should not be made aware that the same one was
+        // randomly generated.
+        do {
+            $isGenerated = $this->otpRepo->isGeneratedTwentyFourHourAgo($otp);
+            if ($isGenerated) {
+                Log::info('PIN (' . $otp->pin . ') was generated 24 hours ago, generate a new one.');
+                $otp = $this->createOtpRecord($email);
+            }
+        } while ($isGenerated);
+
+        Log::info('sending PIN ' . $otp->pin);
+
+        $otp->notify(new OtpNotification($otp));
     }
 
     /**
