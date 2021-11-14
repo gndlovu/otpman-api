@@ -9,4 +9,10 @@ interface IOtpService
      * @return void
      */
     public function sendOtp(string $email);
+
+    /**
+     * @param array $data
+     * @return void
+     */
+    public function validateOtp(array $data);
 }

@@ -35,7 +35,7 @@ class OtpService implements IOtpService
     public function sendOtp($email): void
     {
         $otp = $this->otpRepo->getLastOtp($email);
-        if (!$otp) {
+        if (!$otp || $otp->isExpired()) {
             $otp = $this->createOtpRecord($email);
 
             Log::info('no otp found: generate a new one');
@@ -105,5 +105,27 @@ class OtpService implements IOtpService
     {
         // TODO - Make sure it can start with 0
         return random_int(100000, 999999);
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     */
+    public function validateOtp($data)
+    {
+        $otp = $this->otpRepo->getLastOtp($data['email']);
+        if (!$otp) {
+            Log::info('No active OTP.');
+            abort(400, 'No active OTP.');
+        }
+
+        if ($otp->pin != $data['pin'] || $otp->isExpired()) {
+            Log::info('Invalid OTP.');
+            abort(403, 'Invalid OTP.');
+        }
+
+        // Mark as expired
+        $otp->expires_at = Carbon::now();
+        $otp->save();
     }
 }

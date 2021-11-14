@@ -9,3 +9,13 @@ Content-Type: application/json
 {
     "email": "gladwell_n@live.com"
 }
+
+
+### OTP validation API endpoint
+POST http://localhost:2000/api/v1/auth/otp/validate
+Content-Type: application/json
+
+{
+    "email": "gladwell_n@live.com",
+    "pin": 184379
+}

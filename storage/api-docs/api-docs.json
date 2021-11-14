@@ -48,17 +48,63 @@
                     "201": {
                         "description": "OTP sent"
                     },
-                    "400": {
-                        "description": "Bad request"
+                    "403": {
+                        "description": "Maximum OTP requests reached."
                     },
                     "422": {
                         "description": "Invalid email address"
                     },
                     "429": {
                         "description": "Too Many Requests"
+                    }
+                }
+            }
+        },
+        "/auth/otp/validate": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Validate OTP.",
+                "description": "Validates the OTP provided by the user.",
+                "operationId": "validateOtp",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "email"
+                                    },
+                                    "pin": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "email": "gladwell_n@live.com",
+                                    "identifier": 1,
+                                    "pin": 123456
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OTP valid"
                     },
-                    "500": {
-                        "description": "Internal server error"
+                    "403": {
+                        "description": "Invalid OTP"
+                    },
+                    "400": {
+                        "description": "No active OTP"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
                     }
                 }
             }

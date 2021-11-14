@@ -7,6 +7,7 @@ $api->version('v1', ['middleware' => 'api'], function ($api) {
     $api->group(['prefix' => 'auth'], function ($api) {
         $api->group(['prefix' => 'otp'], function ($api) {
             $api->post('request', [OtpController::class, 'requestOtp'])->name('otp.request');
+            $api->post('validate', [OtpController::class, 'validateOtp'])->name('otp.validate');
         });
     });
 
